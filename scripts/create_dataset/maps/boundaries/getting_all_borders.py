@@ -1,22 +1,15 @@
-# -*- coding: utf-8 -*-
-"""
-Spyder Editor
-
-This is a temporary script file.
-"""
 
 import geopandas as gpd
 import pandas as pd
 import matplotlib as mt
 import descartes
-import fiona
+import fiona 
 
 from shapely.geometry import mapping
 from shapely.wkt import loads
+from fiona.crs import from_epsg
 
-
-
-limits  = gpd.read_file("C:/Users/ribei/Dropbox/farmers_arg/data/intermediate_data/maps/raw_maps/arg_limits/linea_de_limite_070111.shp")
+limits  = gpd.read_file("C:/Users/ribei/Dropbox/arg_farmers_data/data/intermediate_data/maps/raw_maps/arg_limits/linea_de_limite_070111.shp")
 
 #here we construct the borders as unique lines objects#
 
@@ -39,7 +32,7 @@ for i in borders:
     border_u = border.unary_union
     
     file_name = str( "/" + str(i).lower().replace("-", "_").replace(" ", "") + ".shp")
-    path = "C:/Users/ribei/Dropbox/farmers_arg/data/intermediate_data/maps/raw_maps/arg_limits/inter_prov/" + file_name 
+    path = "C:/Users/ribei/Dropbox/arg_farmers_data/data/intermediate_data/maps/raw_maps/arg_limits/inter_prov/" + file_name 
     
     with fiona.open(path, 'w', 'ESRI Shapefile', schema = schema, crs = fiona.crs.from_epsg(4326)) as c:
             c.write({
