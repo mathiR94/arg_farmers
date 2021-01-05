@@ -1,13 +1,8 @@
 
 import geopandas as gpd
-import pandas as pd
-import matplotlib as mt
-import descartes
-import fiona 
-
+import fiona
+import unidecode as unc
 from shapely.geometry import mapping
-from shapely.wkt import loads
-from fiona.crs import from_epsg
 
 limits  = gpd.read_file("C:/Users/ribei/Dropbox/arg_farmers_data/data/intermediate_data/maps/raw_maps/arg_limits/linea_de_limite_070111.shp")
 
@@ -18,6 +13,7 @@ borders = set(list(limits["gna"]))
 
 #getting the crs of each figure
 limits.crs
+
 
 #setting the schema for each figure
 schema = {
@@ -32,6 +28,7 @@ for i in borders:
     border_u = border.unary_union
     
     file_name = str( "/" + str(i).lower().replace("-", "_").replace(" ", "") + ".shp")
+    file_name = unc.unidecode(file_name)
     path = "C:/Users/ribei/Dropbox/arg_farmers_data/data/intermediate_data/maps/raw_maps/arg_limits/inter_prov/" + file_name 
     
     with fiona.open(path, 'w', 'ESRI Shapefile', schema = schema, crs = fiona.crs.from_epsg(4326)) as c:
@@ -39,11 +36,7 @@ for i in borders:
                 'geometry': mapping(border_u),
                 'properties': {'id': int(j)},
             })
-    j = j + 1
-
-
-    
-    
+    j = j + 1    
     
     
 
